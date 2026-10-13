@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173d35">
+  <meta name="description" content="A fictional Delaware reinstatement training scenario for Progressive Services employees.">
+  <title>Delaware Reinstatement | Gobble Getaway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: light; --ink:#193630; --muted:#61756d; --paper:#f7f5ec; --white:#fffefa; --line:#d9ded3; --forest:#173d35; --leaf:#b7d45c; --coral:#e77a5a; --blue:#6e9bb0; --gold:#eabe54; --serif:"DM Serif Display", Georgia, serif; --sans:"DM Sans", "Trebuchet MS", sans-serif; }
+    * { box-sizing:border-box; }
+    body { min-width:320px; min-height:100vh; margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:15px; }
+    button, input, select { font:inherit; }
+    .topbar { min-height:68px; padding:0 clamp(16px, 5vw, 72px); display:flex; align-items:center; justify-content:space-between; gap:16px; background:var(--forest); color:var(--white); }
+    .brand { display:flex; align-items:center; gap:11px; }
+    .brand-mark { width:34px; height:34px; display:grid; place-items:center; border:1px solid #789b77; border-radius:50%; color:var(--leaf); font-size:18px; }
+    .brand-name { font-family:var(--serif); font-size:19px; }
+    .topbar-actions { display:flex; align-items:center; gap:14px; }
+    .back-link, .reset-button { padding:8px 11px; border:1px solid #789b77; border-radius:3px; background:transparent; color:var(--white); text-decoration:none; cursor:pointer; font-size:12px; }
+    .back-link:hover, .reset-button:hover { background:#28564a; }
+    .timer { display:flex; align-items:center; gap:8px; font-variant-numeric:tabular-nums; }
+    .timer span:first-child { color:#c6d4c8; font-size:10px; }
+    #timer { min-width:44px; color:var(--gold); font-size:16px; font-weight:700; }
+    main { width:min(1180px, 100%); margin:0 auto; padding:36px clamp(16px, 4vw, 48px) 48px; }
+    .intro { display:flex; align-items:end; justify-content:space-between; gap:20px; margin-bottom:22px; }
+    .eyebrow { margin:0 0 7px; color:#54765e; font-size:10px; font-weight:700; text-transform:uppercase; }
+    h1 { margin:0; font-family:var(--serif); font-size:clamp(30px, 4vw, 42px); font-weight:400; line-height:1.08; }
+    .intro-copy { max-width:380px; margin:0 0 3px; color:var(--muted); line-height:1.6; }
+    .layout { display:grid; grid-template-columns:minmax(0, 1fr) minmax(340px, .9fr); gap:22px; align-items:start; }
+    .visual { overflow:hidden; border:1px solid #cbd7c9; border-radius:4px; background:#c7dfd1; }
+    .farm-art { display:block; width:100%; height:auto; }
+    .visual-caption { padding:12px 14px; background:var(--white); color:var(--muted); font-size:12px; }
+    .visual-caption strong { color:var(--ink); }
+    .disclaimer { margin:12px 2px; color:#7a887e; font-size:11px; line-height:1.5; }
+    .panel { padding:20px; border:1px solid var(--line); border-radius:4px; background:var(--white); }
+    .progress-top { display:flex; justify-content:space-between; gap:10px; margin-bottom:10px; color:var(--muted); font-size:12px; }
+    .progress-track { height:5px; overflow:hidden; margin-bottom:16px; border-radius:4px; background:#e9ece3; }
+    .progress-fill { width:0; height:100%; background:var(--coral); transition:width .2s ease; }
+    .step-tabs { display:grid; grid-template-columns:repeat(3, 1fr); border-bottom:1px solid var(--line); }
+    .step-tab { padding:9px 4px 10px; border:0; border-bottom:3px solid transparent; background:transparent; color:#78877f; cursor:pointer; font-size:11px; font-weight:600; }
+    .step-tab[aria-selected="true"] { border-bottom-color:var(--coral); color:var(--ink); }
+    .step-tab:disabled { cursor:not-allowed; opacity:.45; }
+    .step-tab small { display:block; margin-bottom:4px; color:#8b998e; font-size:9px; font-weight:500; }
+    .step-content { padding-top:18px; }
+    .step-kicker { margin:0 0 5px; color:#9a674e; font-size:10px; font-weight:700; text-transform:uppercase; }
+    h2 { margin:0 0 12px; font-family:var(--serif); font-size:25px; font-weight:400; }
+    h3 { margin:18px 0 7px; font-size:13px; }
+    .copy { margin:0 0 15px; color:#4c6258; line-height:1.6; }
+    .callout { margin:0 0 14px; padding:12px 13px; border-left:3px solid var(--blue); background:#edf4f3; color:#35554d; line-height:1.55; }
+    .callout strong { display:block; margin-bottom:4px; font-size:11px; text-transform:uppercase; }
+    .form-field { margin:0 0 14px; }
+    .form-field label, .field-label { display:block; margin-bottom:6px; font-size:12px; font-weight:700; }
+    .form-field input[type="text"], .form-field input[type="number"], .form-field input[type="date"], .form-field select { width:100%; min-height:42px; padding:9px 11px; border:1px solid #bbc9bd; border-radius:3px; background:#fff; color:var(--ink); }
+    .form-field input:focus, .form-field select:focus { outline:3px solid #527a5b24; border-color:#527a5b; }
+    .help { margin:6px 0 0; color:var(--muted); font-size:11px; line-height:1.5; }
+    .check-list { display:grid; gap:8px; margin:10px 0 15px; }
+    .check-option { display:flex; gap:9px; align-items:flex-start; padding:10px; border:1px solid var(--line); border-radius:3px; background:#fff; line-height:1.45; }
+    .check-option input { margin:3px 0 0; accent-color:#416f50; }
+    .check-option small { display:block; margin-top:2px; color:var(--muted); font-size:10px; }
+    .check-option:has(input:checked) { border-color:#64866b; background:#f1f5ed; }
+    .primary-button, .continue-button { padding:10px 14px; border:0; border-radius:3px; background:var(--forest); color:#fff; cursor:pointer; font-weight:700; }
+    .primary-button:hover, .continue-button:hover { background:#285d4c; }
+    .answer-row { display:flex; gap:8px; }
+    .message { min-height:20px; margin:8px 0 0; color:#ae4f3b; font-size:12px; line-height:1.5; }
+    .outcome { padding:14px; border-left:3px solid #6d9c66; background:#edf4e9; }
+    .outcome.warning { border-color:var(--coral); background:#fbefea; }
+    .outcome h3 { margin:0 0 6px; color:#356348; }
+    .outcome.warning h3 { color:#a14e39; }
+    .outcome p { margin:0 0 8px; color:#4c6258; font-size:13px; line-height:1.55; }
+    .outcome p:last-child { margin-bottom:0; }
+    .summary { margin-top:12px; padding-top:10px; border-top:1px solid #d5dfd0; color:#4c6258; font-size:12px; line-height:1.6; }
+    .scripting-note { margin-top:13px; padding:10px; background:#fbf5df; color:#615b42; font-size:11px; line-height:1.5; }
+    .footer-note { margin-top:17px; padding-top:13px; border-top:1px solid #eaede5; color:#7a887e; font-size:11px; line-height:1.5; }
+    .overlay { position:fixed; z-index:4; inset:0; display:grid; place-items:center; padding:18px; background:#102820c9; }
+    .overlay[hidden], [hidden] { display:none !important; }
+    .overlay-box { width:min(420px, 100%); padding:28px; border:1px solid var(--line); border-radius:4px; background:var(--paper); text-align:center; }
+    .overlay-box h2 { margin:0 0 7px; }
+    .overlay-box p { color:var(--muted); line-height:1.5; }
+    @media(max-width:850px) { .layout { grid-template-columns:1fr; } .visual { max-width:650px; margin:0 auto; } }
+    @media(max-width:540px) { .topbar { padding:0 12px; } .topbar-actions { gap:7px; } .back-link,.reset-button { padding:7px 8px; font-size:11px; } .timer span:first-child { display:none; } main { padding:24px 13px 36px; } .intro { display:block; } .intro-copy { margin-top:9px; font-size:13px; } .panel { padding:16px 14px; } .answer-row { flex-direction:column; } .primary-button { min-height:42px; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { transition-duration:.01ms !important; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">✦</span><span class="brand-name">Gobble Getaway</span></div>
+    <div class="topbar-actions"><a class="back-link" href="index.html">All cases</a><div class="timer"><span>UNTIL NIGHTFALL</span><span id="timer">15:00</span></div><button class="reset-button" id="reset-button" type="button">Start over</button></div>
+  </header>
+  <main>
+    <section class="intro"><div><p class="eyebrow">November · Progressive employee training simulation</p><h1>Delaware Reinstatement</h1></div><p class="intro-copy">Tilda is reviewing a Delaware policy cancelled for non-payment. Follow the servicing path, check the dates, and decide what to do before nightfall.</p></section>
+    <div class="layout">
+      <section>
+        <div class="visual">
+          <svg class="farm-art" viewBox="0 0 760 430" role="img" aria-labelledby="art-title art-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="art-title">Tilda at the Foxridge service desk</title>
+            <desc id="art-desc">A turkey stands beside a farm gate, with a November sunset over the hills.</desc>
+            <rect width="760" height="430" fill="#c7dfd1"/><circle cx="631" cy="78" r="37" fill="#f1cb70"/>
+            <path d="M0 218 Q148 153 286 213 T553 196 T760 213 V430 H0Z" fill="#9aba7b"/><path d="M0 286 Q128 236 274 286 T540 272 T760 288 V430 H0Z" fill="#668e62"/><path d="M0 355 Q174 318 332 363 T760 346 V430 H0Z" fill="#416f50"/>
+            <path d="M86 287 V372 M153 287 V372 M86 303 H153 M86 334 H153 M86 365 H153" stroke="#eee2c5" stroke-width="8"/><rect x="110" y="321" width="15" height="19" rx="3" fill="#eabe54"/>
+            <ellipse cx="392" cy="348" rx="65" ry="16" fill="#315d47" opacity=".35"/>
+            <path d="M365 302 Q322 277 335 239 Q351 256 365 260 Q348 227 374 209 Q383 234 395 244 Q394 207 426 201 Q429 235 418 253 Q454 232 469 252 Q447 278 429 284Z" fill="#e77a5a" stroke="#bd5948" stroke-width="3"/>
+            <path d="M372 297 Q350 270 365 250 Q382 267 389 275 Q385 244 408 235 Q412 265 409 282 Q432 256 450 264 Q438 290 421 302Z" fill="#eabe54" stroke="#c3943d" stroke-width="3"/>
+            <ellipse cx="400" cy="312" rx="42" ry="49" fill="#435d48"/><ellipse cx="403" cy="324" rx="27" ry="31" fill="#d9c79d"/><ellipse cx="408" cy="263" rx="26" ry="30" fill="#536c50"/>
+            <ellipse cx="418" cy="260" rx="12" ry="14" fill="#fff7e1"/><circle cx="421" cy="261" r="4" fill="#223b31"/><path d="M430 270 L452 276 L431 284Z" fill="#eabe54"/>
+            <path d="M391 359 L385 380 M412 359 L419 380" stroke="#db8e55" stroke-width="6" stroke-linecap="round"/>
+            <path d="M523 368 V291 M596 368 V291 M523 308 H596 M523 338 H596 M523 365 H596" stroke="#e5d9bb" stroke-width="7"/>
+            <path d="M240 385 q8 -21 16 0 q8 -21 16 0 M659 388 q8 -21 16 0 q8 -21 16 0" fill="none" stroke="#c4d774" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <div class="visual-caption"><strong>Foxridge Farm service desk</strong> · One standalone Delaware case</div>
+        </div>
+        <p class="disclaimer">Fictional employee, policy, dates, and actions. This simulation does not access company tools, make reinstatements, or issue disbursements.</p>
+      </section>
+      <section class="panel" aria-label="Delaware reinstatement scenario">
+        <div class="progress-top"><span id="progress-label"><strong>0</strong> of 3 steps complete</span><span>Services</span></div>
+        <div class="progress-track" role="progressbar" aria-label="Steps complete" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><div class="progress-fill"></div></div>
+        <nav class="step-tabs" aria-label="Scenario steps"><button class="step-tab" data-step="0" type="button" aria-selected="true"><small>01 · OPEN</small>Verify</button><button class="step-tab" data-step="1" type="button" aria-selected="false" disabled><small>02 · LOCKED</small>Review</button><button class="step-tab" data-step="2" type="button" aria-selected="false" disabled><small>03 · LOCKED</small>Service</button></nav>
+        <div class="step-content" id="step-content" aria-live="polite"></div>
+        <div class="footer-note">For policy-specific outcomes, follow current approved Delaware guidance. This training case is not a substitute for company procedures.</div>
+      </section>
+    </div>
+  </main>
+  <div class="overlay" id="time-overlay" hidden><div class="overlay-box" role="dialog" aria-modal="true" aria-labelledby="time-title"><h2 id="time-title">Night has fallen</h2><p>Tilda's case timed out. Start a fresh Delaware scenario to try again.</p><button class="primary-button" type="button" data-restart>Try again</button></div></div>
+  <script>
+    (() => {
+      const storageKey = "gobble-getaway-delaware-v1";
+      const durationMs = 15 * 60 * 1000;
+      const employee = { fullName: "Jordan Taylor", role: "Claims Specialist" };
+      const stepNames = ["Employee verification", "DE eligibility review", "Payment and Services"];
+      const freshState = () => ({ solved:[false,false,false], current:0, deadline:Date.now()+durationMs, source:"", ageDays:null, event:"", weather:false, decision:"", resultMessage:"", paymentStatus:"", paymentMode:"", cancelDate:"", paymentDate:"", gapDays:null, effectiveDate:"", draftStatus:"", complete:false });
+      let state;
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey));
+        state = saved && Array.isArray(saved.solved) && saved.solved.length === 3 && Number.isFinite(saved.deadline)
+          ? { ...freshState(), ...saved, solved:saved.solved.map(Boolean), current:Math.min(2,Math.max(0,Number(saved.current)||0)), source:["Outlook","Teams"].includes(saved.source)?saved.source:"" }
+          : freshState();
+      } catch { state = freshState(); }
+
+      const content = document.querySelector("#step-content");
+      const tabs = [...document.querySelectorAll("[data-step]")];
+      const timeOverlay = document.querySelector("#time-overlay");
+      const timer = document.querySelector("#timer");
+      const resetButton = document.querySelector("#reset-button");
+      let timerHandle;
+
+      function save() { try { localStorage.setItem(storageKey,JSON.stringify(state)); } catch { /* Continue without saved progress. */ } }
+      function formatTime(seconds) { return `${String(Math.floor(seconds/60)).padStart(2,"0")}:${String(seconds%60).padStart(2,"0")}`; }
+      function tick() {
+        if (state.complete) return;
+        const left = Math.max(0,Math.ceil((state.deadline-Date.now())/1000));
+        timer.textContent = formatTime(left);
+        if (!left) { timeOverlay.hidden=false; return; }
+        timerHandle=window.setTimeout(tick,250);
+      }
+      function render() {
+        const completed=state.solved.filter(Boolean).length;
+        document.querySelector("#progress-label").innerHTML=`<strong>${completed}</strong> of 3 steps complete`;
+        document.querySelector(".progress-fill").style.width=`${completed/3*100}%`;
+        document.querySelector(".progress-track").setAttribute("aria-valuenow",completed);
+        tabs.forEach((tab,index)=>{ tab.disabled=index>state.solved.findIndex((value)=>!value) && state.solved.some((value)=>!value); tab.setAttribute("aria-selected",String(index===state.current)); tab.querySelector("small").textContent=state.solved[index]?`${String(index+1).padStart(2,"0")} · COMPLETE`:index===state.current?`${String(index+1).padStart(2,"0")} · OPEN`:`${String(index+1).padStart(2,"0")} · LOCKED`; });
+        content.innerHTML=`<p class="step-kicker">Step ${String(state.current+1).padStart(2,"0")} · ${state.solved[state.current]?"Complete":"Scenario"}</p><h2>${stepNames[state.current]}</h2>${getStepContent()}`;
+        content.querySelector("#verify-form")?.addEventListener("submit",verifyEmployee);
+        content.querySelector("#review-form")?.addEventListener("submit",reviewEligibility);
+        content.querySelector("#payment-form")?.addEventListener("submit",reviewPayment);
+        content.querySelector("#services-form")?.addEventListener("submit",completeServicesAction);
+        content.querySelector("[data-continue]")?.addEventListener("click",()=>{state.current=2;save();render();});
+        content.querySelector("#draft-status")?.addEventListener("change",updateDraftGuidance);
+        timeOverlay.hidden=!(!state.solved.every(Boolean)&&Date.now()>=state.deadline);
+      }
+      function getStepContent() {
+        if (state.current===0) return state.solved[0]
+          ? `<div class="outcome"><h3>Employee identity verified</h3><p>Full name (primary) and role (secondary) matched in the simulated ${state.source} directory.</p><button class="continue-button" type="button" data-continue>Continue to Delaware review →</button></div>`
+          : `<div class="callout"><strong>Fictional employee request</strong>“Hi, this is ${employee.fullName}, a ${employee.role}. I need help with a Delaware policy reinstatement.”</div><p class="copy">Collect one primary and one secondary identity check. Verify both in the same approved source before discussing policy details.</p><form id="verify-form"><div class="form-field"><label for="employee-name">Primary check · Full name</label><input id="employee-name" name="fullName" autocomplete="off" required placeholder="Employee's full name"></div><div class="form-field"><label for="employee-role">Secondary check · Role</label><input id="employee-role" name="role" autocomplete="off" required placeholder="Employee's role"></div><span class="field-label">Verification source</span><div class="check-list"><label class="check-option"><input type="radio" name="source" value="Outlook" checked><span>Outlook for Business<small>Simulated employee lookup</small></span></label><label class="check-option"><input type="radio" name="source" value="Teams"><span>Teams for Business<small>Simulated employee lookup</small></span></label></div><div class="answer-row"><button class="primary-button" type="submit">Verify both checks</button></div><p class="message" id="verify-message" role="status"></p></form>`;
+
+        if (state.current===1) return state.solved[1]
+          ? `<div class="outcome ${state.decision==="hold"||state.decision==="review"||state.decision==="leniency"||state.decision==="recovery"?"warning":""}"><h3>${state.decision==="date-review"?"Date review required":"Review direction"}</h3><p>${state.resultMessage}</p>${state.decision==="date-review"?`<button class="continue-button" type="button" data-continue>Continue to payment review →</button>`:""}</div>`
+          : `<div class="callout"><strong>Delaware non-payment cancellation</strong>Moratorium or leniency events may only be processed when the event directs you to do so. Billing Leniency supersedes the Reinstatement Review steps.</div><form id="review-form"><div class="form-field"><label for="request-kind">Request type</label><select id="request-kind" name="kind"><option value="nonpayment">Policy cancelled for non-payment of premium</option><option value="other">Other reinstatement scenario</option></select><p class="help">Recovery processes other reinstates when applicable.</p></div><div class="form-field"><label for="event-type">Is the policy impacted by a moratorium or leniency?</label><select id="event-type" name="event"><option value="none">No event applies</option><option value="moratorium">Moratorium</option><option value="leniency">Billing Leniency</option></select></div><label class="check-option"><input type="checkbox" name="event-directed"><span>The event specifically directs processing</span></label><div class="form-field"><label for="age-days">Days from policy inception to review</label><input id="age-days" name="ageDays" type="number" min="0" step="1" value="75" required><p class="help">Use the approved Date Calculator. At 60 days or less, review for reinstatement acceptability.</p></div><label class="check-option"><input type="checkbox" name="weather"><span>Weather binding restrictions are in effect</span></label><p class="help">The Delaware state mandate supersedes weather binding restrictions when its reinstatement criteria are met.</p><div class="answer-row"><button class="primary-button" type="submit">Review Delaware rules</button></div><p class="message" id="review-message" role="status"></p></form>`;
+
+        if (state.solved[2]) return terminalPaymentMarkup();
+        if (state.paymentStatus) return getPaymentOutcomeMarkup();
+        return `<div class="callout"><strong>61 days or greater from inception</strong>For a full payment, calculate the days between the cancel effective date and payment postmark/date collected. For an agent-collected payment, use the date collected.</div><form id="payment-form"><div class="form-field"><label for="amount-status">Was the full cancel amount received?</label><select id="amount-status" name="amountStatus"><option value="full">Yes, full amount received</option><option value="partial">Partial payment</option><option value="none">No payment received</option></select></div><div class="form-field"><label for="cancel-date">Cancel effective date</label><input id="cancel-date" name="cancelDate" type="date"></div><div class="form-field"><label for="payment-date">Full payment postmark/date collected</label><input id="payment-date" name="paymentDate" type="date"><p class="help">Required for full payment only. Use the date collected for an agent payment. A <a href="https://www.timeanddate.com/date/dateadd.html" target="_blank" rel="noopener">Date Calculator</a> can check the interval.</p></div><div class="form-field"><label for="payment-mode">Payment collected by</label><select id="payment-mode" name="paymentMode"><option value="other">Other method</option><option value="agent">Agent</option></select></div><div class="answer-row"><button class="primary-button" type="submit">Calculate Services path</button></div><p class="message" id="payment-message" role="status"></p></form>`;
+      }
+      function verifyEmployee(event) {
+        event.preventDefault(); const form=event.currentTarget;
+        if(form.elements.fullName.value.trim().toLowerCase()!==employee.fullName.toLowerCase()||form.elements.role.value.trim().toLowerCase()!==employee.role.toLowerCase()){content.querySelector("#verify-message").textContent="Both checks must match the directory. Do not release request details.";return;}
+        state.source=form.elements.source.value;state.solved[0]=true;state.current=1;save();render();
+      }
+      function finishAt(step,decision,message) { state.decision=decision;state.resultMessage=message;state.solved[step]=true;state.solved[2]=true;state.current=2;state.complete=true;save();render(); }
+      function reviewEligibility(event) {
+        event.preventDefault();const form=event.currentTarget;const message=content.querySelector("#review-message");const age=Number(form.elements.ageDays.value);const eventType=form.elements.event.value;const directed=form.elements["event-directed"].checked;
+        if(form.elements.kind.value==="other"){finishAt(1,"recovery","This is not the Delaware non-payment scenario. Recovery processes other reinstates when applicable.");return;}
+        if(eventType!=="none"&&!directed){finishAt(1,"hold","Do not process a policy impacted by a moratorium or leniency unless the event directs processing.");return;}
+        if(eventType==="leniency"){finishAt(1,"leniency","Billing Leniency supersedes the Reinstatement Review steps. Follow the event's instructions; this simulation does not invent a leniency outcome.");return;}
+        if(age<=60){finishAt(1,"review","At 60 days or less from inception, review reinstatement acceptability using the approved DE Reinstate Review and Reinstatement guidance. This simulation does not determine acceptability.");return;}
+        state.ageDays=age;state.event=eventType;state.weather=form.elements.weather.checked;state.decision="date-review";state.resultMessage="Policy age is 61 days or greater. Review the cancel-to-payment interval next.";state.solved[1]=true;state.current=2;save();render();
+      }
+      function reviewPayment(event) {
+        event.preventDefault();const form=event.currentTarget;const message=content.querySelector("#payment-message");const amountStatus=form.elements.amountStatus.value;
+        state.paymentMode=form.elements.paymentMode.value;state.cancelDate=form.elements.cancelDate.value;state.paymentDate=form.elements.paymentDate.value;
+        if(amountStatus!=="full"){state.paymentStatus="incomplete";state.amountStatus=amountStatus;save();render();return;}
+        if(!state.cancelDate||!state.paymentDate){message.textContent="Enter both dates to calculate the interval.";return;}
+        const cancelUtc=Date.parse(`${state.cancelDate}T00:00:00Z`);const paymentUtc=Date.parse(`${state.paymentDate}T00:00:00Z`);const gap=Math.floor((paymentUtc-cancelUtc)/86400000);
+        if(!Number.isFinite(gap)||gap<0){message.textContent="The payment date cannot be earlier than the cancel effective date.";return;}
+        state.gapDays=gap;state.amountStatus=amountStatus;state.paymentStatus=gap>=31?"ineligible":"full";
+        state.resultMessage=gap>=31?"Advise the customer that the policy is not eligible to be reinstated, issue a disbursement for the payment received, and see Returning Customer guidance to determine quote eligibility.":"The full cancel amount was received within 30 days. Reinstate with a lapse in coverage.";
+        if(gap<=30){const effective=new Date(paymentUtc+(state.paymentMode==="agent"?0:86400000));state.effectiveDate=effective.toISOString().slice(0,10);}
+        save();render();
+      }
+      function getPaymentOutcomeMarkup() {
+        if(state.paymentStatus==="incomplete") return `<div class="outcome warning"><h3>Full payment required</h3><p>Advise the customer that the full cancellation amount must be received before reinstatement. Have them pay the remaining balance, then use the Full Payment Received path with the date the full amount is received.</p><button class="continue-button" type="button" id="complete-incomplete">Acknowledge Services guidance</button></div>`;
+        if(state.paymentStatus==="ineligible") return `<div class="outcome warning"><h3>Not eligible for reinstatement</h3><p>The full payment arrived ${state.gapDays} days after the cancel effective date. Starting at day 31, Services advises that the policy is not eligible for reinstatement.</p><form id="services-form"><label class="check-option"><input type="checkbox" name="confirm" required><span>Advise the customer, issue a disbursement for the payment received, and review Returning Customer guidance for quote eligibility.</span></label><div class="answer-row"><button class="primary-button" type="submit">Complete Services path</button></div><p class="message" id="services-message" role="status"></p></form></div>`;
+        return `<div class="outcome"><h3>Full payment received within 30 days</h3><p>Days between cancellation and payment: <strong>${state.gapDays}</strong>. At ${state.ageDays} days from inception, the Delaware mandate applies: reinstate with a lapse in coverage.</p>${state.weather?"<p>The state mandate supersedes the weather binding restriction.</p>":""}<form id="services-form"><h3>Complete the Services steps</h3><label class="check-option"><input type="checkbox" name="acknowledge" required><span>Select Reinstate and acknowledge review of the Delaware reinstate process.</span></label><label class="check-option"><input type="checkbox" name="lapse" required><span>Select Yes to reinstate with a lapse in coverage.</span></label><div class="form-field"><label>Effective date</label><input type="text" readonly value="${formatDate(state.effectiveDate)}"><p class="help">${state.paymentMode==="agent"?"Agent-collected payment: use the date the agent collected payment.":"Other payment: use payment/postmark date plus one day."}</p></div><label class="check-option"><input type="checkbox" name="scripting" required><span>Read the required scripting.</span></label><div class="form-field"><label for="draft-status">Draft issued as a result of cancellation</label><select id="draft-status" name="draftStatus" required><option value="">Choose draft status</option><option value="none">No cancellation draft</option><option value="not-cashed">Draft issued, not cashed</option><option value="cashed">Draft issued, cashed</option></select><p class="help" id="draft-guidance">Choose the draft status to show the required Services action.</p></div><label class="check-option"><input type="checkbox" name="draftAction" required><span>I completed the draft-specific customer advice, when applicable.</span></label><div class="answer-row"><button class="primary-button" type="submit">Complete reinstatement steps</button></div><p class="message" id="services-message" role="status"></p></form></div>`;
+      }
+      function updateDraftGuidance(event) {
+        const guidance=content.querySelector("#draft-guidance");if(!guidance)return;
+        const messages={none:"No cancellation draft action is needed.","not-cashed":"Advise the caller that a stop payment will be placed on the draft and the amount reapplied to the policy.",cashed:"Advise the caller the amount will be added to future billing and offer the option to process an additional payment."};
+        guidance.textContent=messages[event.currentTarget.value]||"Choose the draft status to show the required Services action.";
+      }
+      function completeServicesAction(event) {
+        event.preventDefault();const form=event.currentTarget;const message=content.querySelector("#services-message");
+        if(form.elements.confirm&&!form.elements.confirm.checked){message.textContent="Complete the customer, disbursement, and Returning Customer actions.";return;}
+        if(form.elements.acknowledge&&(!form.elements.acknowledge.checked||!form.elements.lapse.checked||!form.elements.scripting.checked||!form.elements.draftStatus.value||!form.elements.draftAction.checked)){message.textContent="Complete each required Services action before finishing.";return;}
+        state.solved[2]=true;state.complete=true;save();render();
+      }
+      function terminalPaymentMarkup() {
+        if(state.decision==="hold"||state.decision==="leniency"||state.decision==="review"||state.decision==="recovery") return `<div class="outcome warning"><h3>Follow the review direction</h3><p>${state.resultMessage}</p></div>`;
+        if(state.paymentStatus==="incomplete") return `<div class="outcome"><h3>Services guidance complete</h3><p>Advise the customer that the full cancellation amount must be received before reinstatement. Once the remaining balance is paid, use the full-payment path with the date the full amount is received.</p><p>No reinstatement was processed in this simulation.</p></div>`;
+        if(state.paymentStatus==="ineligible") return `<div class="outcome warning"><h3>Services path complete</h3><p>${state.resultMessage}</p><p>Payment interval: ${state.gapDays} days. No reinstatement is processed in this simulation.</p></div>`;
+        return `<div class="outcome"><h3>Reinstatement path complete</h3><p>The policy is reinstated with a lapse in coverage. The effective date is ${formatDate(state.effectiveDate)}.</p><p>This action was simulated only; no policy or payment was changed.</p></div>`;
+      }
+      function formatDate(value) { if(!value)return "Not set";return new Intl.DateTimeFormat("en-US",{month:"long",day:"numeric",year:"numeric",timeZone:"UTC"}).format(new Date(`${value}T00:00:00Z`)); }
+      function restart() { if(timerHandle)window.clearTimeout(timerHandle);state=freshState();timeOverlay.hidden=true;save();render();tick(); }
+      tabs.forEach((tab)=>tab.addEventListener("click",()=>{const step=Number(tab.dataset.step);if(!tab.disabled){state.current=step;save();render();}}));
+      resetButton.addEventListener("click",()=>{if(window.confirm("Start this Delaware case over?"))restart();});
+      document.querySelectorAll("[data-restart]").forEach((button)=>button.addEventListener("click",restart));
+      document.addEventListener("click",(event)=>{if(event.target&&event.target.id==="complete-incomplete"){state.solved[2]=true;state.complete=true;save();render();}});
+      render();
+      if(Date.now()>=state.deadline&&!state.complete){timeOverlay.hidden=false;timer.textContent="00:00";}else tick();
+    })();
+  </script>
+</body>
+</html>

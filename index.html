@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173d35">
+  <meta name="description" content="A fictional November training escape room about employee verification and processing a Florida ID card request.">
+  <title>Gobble Getaway | Employee Service Desk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #193630;
+      --muted: #61756d;
+      --paper: #f7f5ec;
+      --white: #fffefa;
+      --line: #d9ded3;
+      --forest: #173d35;
+      --leaf: #b7d45c;
+      --coral: #e77a5a;
+      --blue: #6e9bb0;
+      --gold: #eabe54;
+      --serif: "DM Serif Display", Georgia, serif;
+      --sans: "DM Sans", "Trebuchet MS", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 15px;
+    }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    .topbar {
+      min-height: 74px;
+      padding: 0 clamp(18px, 5vw, 76px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      background: var(--forest);
+      color: var(--white);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #789b77;
+      border-radius: 50%;
+      color: var(--leaf);
+      font-size: 19px;
+    }
+    .brand-name { font-family: var(--serif); font-size: 20px; }
+    .topbar-right { display: flex; align-items: center; gap: 18px; }
+    .timer { display: flex; align-items: center; gap: 8px; font-variant-numeric: tabular-nums; }
+    .timer-label { color: #c6d4c8; font-size: 12px; }
+    #timer { min-width: 48px; color: var(--gold); font-size: 17px; font-weight: 700; }
+    .reset-button {
+      padding: 8px 12px;
+      border: 1px solid #789b77;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--white);
+      cursor: pointer;
+    }
+    .reset-button:hover { background: #28564a; }
+    main { width: min(1280px, 100%); margin: 0 auto; padding: 38px clamp(16px, 4vw, 54px) 52px; }
+    .intro { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin-bottom: 24px; }
+    .eyebrow { margin: 0 0 8px; color: #54765e; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    h1 { margin: 0; font-family: var(--serif); font-size: clamp(30px, 4vw, 44px); font-weight: 400; line-height: 1.08; }
+    .intro-copy { max-width: 370px; margin: 0 0 3px; color: var(--muted); line-height: 1.6; }
+    .game-grid { display: grid; grid-template-columns: minmax(0, 1.22fr) minmax(320px, .78fr); gap: 24px; align-items: start; }
+    .scene-column { min-width: 0; }
+    .scene-frame { overflow: hidden; border: 1px solid #ccd6c8; border-radius: 5px; background: #c8dfd1; }
+    .farm-scene { display: block; width: 100%; height: auto; }
+    .spot-ring { fill: none; stroke: #f8edaa; stroke-width: 5; stroke-dasharray: 8 8; opacity: 0; transition: opacity .2s ease; }
+    .spot-ring.active { opacity: 1; }
+    .scene-caption { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 16px; background: var(--white); color: var(--muted); font-size: 12px; }
+    .scene-caption strong { color: var(--ink); font-weight: 700; }
+    .clue-strip { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 13px; }
+    .clue { padding: 7px 10px; border: 1px solid var(--line); border-radius: 3px; background: #eeefe5; color: #476052; font-size: 12px; }
+    .clue b { margin-left: 4px; color: var(--ink); }
+    .puzzle-panel { min-width: 0; padding: 22px; border: 1px solid var(--line); border-radius: 5px; background: var(--white); }
+    .progress-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .progress-top span { color: var(--muted); font-size: 12px; }
+    .progress-top strong { color: var(--ink); }
+    .progress-track { height: 5px; overflow: hidden; margin-bottom: 18px; border-radius: 5px; background: #e9ece3; }
+    .progress-fill { width: 0; height: 100%; background: var(--coral); transition: width .25s ease; }
+    .room-tabs { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
+    .room-tab {
+      min-width: 0;
+      padding: 10px 5px 11px;
+      border: 0;
+      border-bottom: 3px solid transparent;
+      background: transparent;
+      color: #78877f;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .room-tab[aria-selected="true"] { border-bottom-color: var(--coral); color: var(--ink); }
+    .room-tab:disabled { cursor: not-allowed; opacity: .48; }
+    .room-tab .tab-status { display: block; margin-bottom: 4px; color: #8b998e; font-size: 10px; font-weight: 500; }
+    .room-content { padding-top: 21px; }
+    .room-kicker { margin: 0 0 5px; color: #9a674e; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    h2 { margin: 0 0 13px; font-family: var(--serif); font-size: 26px; font-weight: 400; }
+    .puzzle-copy { margin: 0 0 16px; color: #4c6258; line-height: 1.6; }
+    .sack-row { display: flex; gap: 9px; margin: 0 0 17px; }
+    .sack {
+      flex: 1;
+      min-width: 0;
+      padding: 12px 6px;
+      border: 1px solid #ded5bd;
+      border-radius: 3px;
+      background: #f4eee0;
+      text-align: center;
+    }
+    .sack-icon { display: block; margin-bottom: 4px; color: #bd8051; font-size: 19px; }
+    .sack strong { display: block; font-size: 14px; }
+    .sack small { color: var(--muted); font-size: 10px; }
+    .answer-form label { display: block; margin-bottom: 7px; color: var(--ink); font-size: 12px; font-weight: 700; }
+    .answer-row { display: flex; gap: 8px; }
+    .answer-row input {
+      width: 100%;
+      min-width: 0;
+      padding: 11px 12px;
+      border: 1px solid #bbc9bd;
+      border-radius: 3px;
+      outline: none;
+      background: #fff;
+      color: var(--ink);
+    }
+    .answer-row input:focus { border-color: #527a5b; box-shadow: 0 0 0 3px #527a5b24; }
+    .submit-button, .continue-button {
+      flex: 0 0 auto;
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--forest);
+      color: white;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .submit-button:hover, .continue-button:hover { background: #285d4c; }
+    .form-message { min-height: 21px; margin: 8px 0 0; color: #ae4f3b; font-size: 12px; }
+    .form-message.success { color: #35744c; }
+    .hint-toggle { margin-top: 5px; padding: 5px 0; border: 0; background: transparent; color: #557561; cursor: pointer; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
+    .hint-text { margin: 8px 0 0; padding: 10px 12px; border-left: 3px solid var(--gold); background: #fbf5df; color: #615b42; font-size: 12px; line-height: 1.5; }
+    .solved-box { padding: 15px; border-left: 3px solid #6d9c66; background: #edf4e9; }
+    .solved-box strong { display: block; margin-bottom: 5px; color: #356348; }
+    .solved-box p { margin: 0 0 12px; color: #4c6258; font-size: 13px; line-height: 1.5; }
+    .continue-button { padding: 9px 12px; font-size: 12px; }
+    .story-note { display: flex; gap: 10px; margin-top: 20px; padding-top: 14px; border-top: 1px solid #eaede5; color: #7a887e; font-size: 11px; line-height: 1.5; }
+    .story-note span { color: var(--coral); font-size: 15px; }
+    .case-selector { width: min(760px, 100%); margin: 42px auto; }
+    .case-selector h2 { margin-bottom: 8px; font-size: 28px; }
+    .case-selector > p { margin: 0 0 18px; color: var(--muted); line-height: 1.6; }
+    .case-options { display: grid; gap: 9px; }
+    .case-option { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px; border: 1px solid var(--line); border-radius: 4px; background: var(--white); color: var(--ink); text-align: left; text-decoration: none; cursor: pointer; }
+    .case-option:hover { border-color: #819b78; background: #f2f4ea; }
+    .case-option strong { display: block; margin-bottom: 4px; font-family: var(--serif); font-size: 19px; font-weight: 400; }
+    .case-option small { display: block; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .case-option .case-action { flex: 0 0 auto; color: #54765e; font-size: 12px; font-weight: 700; }
+    .case-note { margin-top: 14px; color: #7a887e; font-size: 11px; line-height: 1.5; }
+    [hidden] { display: none !important; }
+    .scenario-call { margin: 0 0 16px; padding: 13px 14px; border-left: 3px solid var(--blue); background: #edf4f3; }
+    .scenario-call .call-label { display: block; margin-bottom: 6px; color: #54776f; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .scenario-call p { margin: 0 0 6px; color: #35554d; line-height: 1.55; }
+    .scenario-call blockquote { margin: 8px 0 0; color: #35554d; font-family: var(--serif); font-size: 16px; }
+    .scenario-call small { color: #71877f; font-size: 10px; }
+    .field-help { margin: 6px 0 14px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+    .tool-list, .route-list { display: grid; gap: 8px; margin: 8px 0 14px; }
+    .tool-option, .route-option { display: flex; align-items: flex-start; gap: 9px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 3px; background: #fff; cursor: pointer; line-height: 1.4; }
+    .tool-option:has(input:checked), .route-option:has(input:checked) { border-color: #64866b; background: #f1f5ed; }
+    .tool-option input, .route-option input, .confirm-row input { margin: 3px 0 0; accent-color: #416f50; }
+    .tool-option small, .route-option small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; }
+    .processing-note { display: block; width: 100%; min-height: 112px; resize: vertical; padding: 12px; border: 1px solid #cbd4c8; border-radius: 3px; background: #f7f8f2; color: #35554d; font: 12px/1.7 var(--sans); }
+    .route-heading { margin: 0 0 5px; font-size: 12px; font-weight: 700; }
+    .confirm-row { display: flex; gap: 9px; margin: 13px 0; color: #4c6258; font-size: 12px; line-height: 1.5; }
+    .scenario-disclaimer { margin-top: 13px; color: #7a887e; font-size: 11px; line-height: 1.5; }
+    .overlay { position: fixed; z-index: 5; inset: 0; display: grid; place-items: center; padding: 20px; background: #102820c9; }
+    .overlay[hidden] { display: none; }
+    .overlay-box { width: min(440px, 100%); padding: 32px; border: 1px solid #d9ded3; border-radius: 5px; background: var(--paper); text-align: center; }
+    .overlay-mark { color: var(--coral); font-size: 30px; }
+    .overlay-box h2 { margin: 8px 0; font-size: 32px; }
+    .overlay-box p { margin: 0 0 21px; color: var(--muted); line-height: 1.6; }
+    .overlay-box button { padding: 11px 16px; border: 0; border-radius: 3px; background: var(--forest); color: white; cursor: pointer; font-weight: 700; }
+    footer { margin-top: 20px; color: #829087; font-size: 11px; text-align: center; }
+
+    @media (max-width: 850px) {
+      main { padding-top: 26px; }
+      .game-grid { grid-template-columns: minmax(0, 1fr); }
+      .scene-frame { max-width: 680px; margin: 0 auto; }
+      .clue-strip { margin-bottom: 3px; }
+    }
+    @media (max-width: 520px) {
+      .topbar { min-height: 64px; padding: 0 14px; }
+      .brand { gap: 8px; }
+      .brand-mark { width: 31px; height: 31px; }
+      .brand-name { font-size: 17px; }
+      .topbar-right { gap: 10px; }
+      .timer { gap: 5px; }
+      .timer-label { display: none; }
+      .reset-button { padding: 7px 9px; font-size: 12px; }
+      main { padding: 24px 14px 36px; }
+      .intro { display: block; margin-bottom: 18px; }
+      h1 { font-size: 34px; }
+      .intro-copy { margin-top: 10px; font-size: 13px; }
+      .scene-caption { align-items: start; flex-direction: column; gap: 4px; }
+      .puzzle-panel { padding: 17px 15px; }
+      h2 { font-size: 24px; }
+      .answer-row { flex-direction: column; }
+      .submit-button { min-height: 43px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">✦</span><span class="brand-name">Gobble Getaway</span></div>
+    <div class="topbar-right">
+      <a class="reset-button" href="index.html">All cases</a>
+      <div class="timer" id="timer-panel" aria-live="off" hidden><span class="timer-label">UNTIL NIGHTFALL</span><span id="timer">15:00</span></div>
+      <button class="reset-button" id="reset-button" type="button" hidden>Start over</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="game-title">
+      <div><p class="eyebrow">November · Progressive employee training simulation</p><h1 id="game-title">Operation: Gobble Getaway</h1></div>
+      <p class="intro-copy">Tilda is on the service desk before her November getaway. Choose a standalone case and help her work through it before nightfall.</p>
+    </section>
+
+    <section class="case-selector" id="case-menu" aria-labelledby="case-menu-title">
+      <h2 id="case-menu-title">Choose a case</h2>
+      <p>Each case has its own request, rules, and progress.</p>
+      <div class="case-options">
+        <button class="case-option" id="start-florida-case" type="button"><span><strong>Florida · ID card request</strong><small>Verify the employee, confirm the coverage scenario, and submit a Processing Request Note.</small></span><span class="case-action">Start case →</span></button>
+        <a class="case-option" href="delaware-reinstate.html"><span><strong>Delaware · Reinstatement</strong><small>Review a non-payment cancellation using Delaware's dates, payment, and Services rules.</small></span><span class="case-action">Start case →</span></a>
+      </div>
+      <p class="case-note">Fictional training scenarios only. No company tools or transactions are connected.</p>
+    </section>
+
+    <div class="game-grid" id="florida-game" hidden>
+      <section class="scene-column" aria-label="Foxridge Farm map">
+        <div class="scene-frame">
+          <svg class="farm-scene" viewBox="0 0 820 520" role="img" aria-labelledby="scene-title scene-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="scene-title">Foxridge Farm at late afternoon</title>
+            <desc id="scene-desc">Tilda the turkey stands between employee verification, Florida request review, and processing.</desc>
+            <rect width="820" height="520" fill="#c7dfd1"/>
+            <circle cx="681" cy="91" r="43" fill="#f1cb70"/>
+            <path d="M0 231 Q115 166 242 226 T493 208 T820 213 V520 H0Z" fill="#9aba7b"/>
+            <path d="M0 310 Q148 252 304 310 T612 286 T820 310 V520 H0Z" fill="#668e62"/>
+            <path d="M0 411 Q175 359 356 414 T820 391 V520 H0Z" fill="#416f50"/>
+            <path d="M72 165 Q90 125 108 165 M89 165 V239 M105 185 Q128 145 144 185 M127 185 V252" fill="none" stroke="#668e62" stroke-width="9" stroke-linecap="round"/>
+            <path d="M722 206 Q738 164 754 206 M739 206 V265 M754 225 Q774 181 790 225 M773 225 V268" fill="none" stroke="#668e62" stroke-width="9" stroke-linecap="round"/>
+            <g aria-label="Employee verification">
+              <path d="M86 276 L180 218 L275 276 V395 H86Z" fill="#d97755"/>
+              <path d="M70 280 L180 207 L290 280 L279 290 L180 232 L81 290Z" fill="#f1e8cf"/>
+              <rect x="108" y="301" width="54" height="94" fill="#8f493c"/>
+              <rect x="190" y="301" width="60" height="42" fill="#b4d4d7"/>
+              <path d="M220 301 V343 M190 322 H250" stroke="#f5e7c9" stroke-width="4"/>
+              <text x="180" y="425" fill="#fff7e1" text-anchor="middle" font-size="12" font-family="sans-serif" font-weight="700">VERIFY EMPLOYEE</text>
+            </g>
+            <g aria-label="Florida request review">
+              <path d="M564 260 L576 177 L589 177 L599 260Z" fill="#f3e8cd"/>
+              <circle cx="582" cy="180" r="9" fill="#e77a5a"/>
+              <path d="M582 180 L554 117 M582 180 L652 157 M582 180 L601 250 M582 180 L512 198" stroke="#f4eedb" stroke-width="10" stroke-linecap="round"/>
+              <circle cx="582" cy="180" r="6" fill="#e77a5a"/>
+              <text x="582" y="279" fill="#fff7e1" text-anchor="middle" font-size="12" font-family="sans-serif" font-weight="700">FLORIDA ID CARD</text>
+            </g>
+            <g aria-label="Processing request note">
+              <path d="M701 287 V414 M780 287 V414 M701 306 H780 M701 350 H780 M701 395 H780" stroke="#e6d8b5" stroke-width="9"/>
+              <rect x="734" y="336" width="16" height="21" rx="3" fill="#eabe54"/>
+              <text x="741" y="439" fill="#fff7e1" text-anchor="middle" font-size="12" font-family="sans-serif" font-weight="700">PROCESSING</text>
+            </g>
+            <ellipse class="spot-ring" data-spot="0" cx="180" cy="315" rx="121" ry="123"/>
+            <ellipse class="spot-ring" data-spot="1" cx="582" cy="190" rx="73" ry="105"/>
+            <ellipse class="spot-ring" data-spot="2" cx="741" cy="350" rx="62" ry="94"/>
+            <g aria-label="Tilda the turkey">
+              <ellipse cx="417" cy="370" rx="75" ry="22" fill="#315d47" opacity=".35"/>
+              <path d="M380 322 Q333 293 349 250 Q364 269 377 273 Q361 235 387 217 Q397 246 408 256 Q408 218 442 209 Q444 246 434 265 Q473 243 489 264 Q463 294 448 301Z" fill="#e77a5a" stroke="#bd5948" stroke-width="3"/>
+              <path d="M383 310 Q358 282 372 259 Q389 279 396 285 Q390 250 413 239 Q418 272 417 291 Q438 263 460 271 Q447 301 432 313Z" fill="#eabe54" stroke="#c3943d" stroke-width="3"/>
+              <ellipse cx="417" cy="331" rx="48" ry="59" fill="#435d48"/>
+              <ellipse cx="420" cy="344" rx="31" ry="37" fill="#d9c79d"/>
+              <path d="M407 383 L399 403 M432 383 L438 403" stroke="#db8e55" stroke-width="7" stroke-linecap="round"/>
+              <ellipse cx="424" cy="270" rx="30" ry="36" fill="#536c50"/>
+              <ellipse cx="435" cy="265" rx="14" ry="17" fill="#fff7e1"/>
+              <circle cx="439" cy="266" r="5" fill="#223b31"/>
+              <path d="M449 277 L473 284 L450 292Z" fill="#eabe54"/>
+              <path d="M454 293 Q447 307 458 311 Q469 305 461 294Z" fill="#e77a5a"/>
+            </g>
+            <path d="M0 462 Q185 445 352 469 T820 451 V520 H0Z" fill="#315d47" opacity=".52"/>
+            <path d="M297 482 q8 -23 16 0 q8 -23 16 0 M521 468 q8 -23 16 0 q8 -23 16 0 M642 486 q8 -23 16 0 q8 -23 16 0" fill="none" stroke="#c4d774" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <div class="scene-caption"><strong id="scene-room">You are at employee verification</strong><span>Three checkpoints before Tilda can make her getaway.</span></div>
+        </div>
+        <div class="scenario-disclaimer">
+          Progressive employee training simulation. Names, directory results, and request submission are fictional; this game does not connect to company systems.
+        </div>
+      </section>
+
+      <section class="puzzle-panel" aria-label="Employee service desk scenario">
+        <div class="progress-top"><span id="progress-label"><strong>0</strong> of 3 steps complete</span><span>Escape route</span></div>
+        <div class="progress-track" role="progressbar" aria-label="Scenario steps complete" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><div class="progress-fill"></div></div>
+        <nav class="room-tabs" aria-label="Scenario steps">
+          <button class="room-tab" type="button" data-room-tab="0" aria-selected="true"><span class="tab-status">01 · OPEN</span>Verify</button>
+          <button class="room-tab" type="button" data-room-tab="1" aria-selected="false" disabled><span class="tab-status">02 · LOCKED</span>Request</button>
+          <button class="room-tab" type="button" data-room-tab="2" aria-selected="false" disabled><span class="tab-status">03 · LOCKED</span>Processing</button>
+        </nav>
+        <div id="puzzle-content" class="room-content" aria-live="polite"></div>
+        <div class="story-note"><span aria-hidden="true">✳</span><span>Do not release request information until both employee identity checks are verified.</span></div>
+      </section>
+    </div>
+    <footer>A fictional November training adventure at Foxridge Farm.</footer>
+  </main>
+
+  <div class="overlay" id="caught-overlay" hidden>
+    <div class="overlay-box" role="dialog" aria-modal="true" aria-labelledby="caught-title">
+      <div class="overlay-mark" aria-hidden="true">☾</div>
+      <h2 id="caught-title">Night has fallen</h2>
+      <p>Tilda's service-desk shift is over before the request is complete. The scenario resets for another try.</p>
+      <button type="button" data-restart>Try again</button>
+    </div>
+  </div>
+  <div class="overlay" id="escaped-overlay" hidden>
+    <div class="overlay-box" role="dialog" aria-modal="true" aria-labelledby="escaped-title">
+      <div class="overlay-mark" aria-hidden="true">✦</div>
+      <h2 id="escaped-title">Request sent to Processing</h2>
+      <p>The Processing Request Note is submitted in this simulation. Processing will issue the ID card, and Tilda is free to make her November getaway.</p>
+      <button type="button" data-restart>Play again</button>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const storageKey = "gobble-getaway-training-v2";
+      const roundSeconds = 15 * 60;
+      const steps = ["Employee verification", "Florida ID card request", "Processing Request Note"];
+      const employeeRecord = { fullName: "Jordan Taylor", role: "Claims Specialist" };
+      const freshState = () => ({
+        solved: [false, false, false],
+        current: 0,
+        deadline: Date.now() + roundSeconds * 1000,
+        verificationSource: ""
+      });
+      let state;
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey));
+        state = saved && Array.isArray(saved.solved) && saved.solved.length === 3 && Number.isFinite(saved.deadline)
+          ? {
+            ...freshState(),
+            ...saved,
+            solved: saved.solved.map(Boolean),
+            current: Math.min(2, Math.max(0, Number(saved.current) || 0)),
+            verificationSource: ["Outlook", "Teams"].includes(saved.verificationSource) ? saved.verificationSource : ""
+          }
+          : freshState();
+      } catch {
+        state = freshState();
+      }
+
+      const puzzleContent = document.querySelector("#puzzle-content");
+      const roomTabs = [...document.querySelectorAll("[data-room-tab]")];
+      const timer = document.querySelector("#timer");
+      const timerPanel = document.querySelector("#timer-panel");
+      const caseMenu = document.querySelector("#case-menu");
+      const floridaGame = document.querySelector("#florida-game");
+      const resetButton = document.querySelector("#reset-button");
+      const caughtOverlay = document.querySelector("#caught-overlay");
+      const escapedOverlay = document.querySelector("#escaped-overlay");
+      let hintOpen = false;
+      let caseStarted = false;
+      let remainingMs = Math.max(0, state.deadline - Date.now());
+      let timerHandle;
+
+      function save() {
+        try { localStorage.setItem(storageKey, JSON.stringify(state)); } catch { /* Game remains playable without storage. */ }
+      }
+
+      function unlockedCount() {
+        return state.solved.findIndex((solved) => !solved) === -1 ? 3 : state.solved.findIndex((solved) => !solved);
+      }
+
+      function render() {
+        const unlocked = unlockedCount();
+        const completed = state.solved.filter(Boolean).length;
+        document.querySelector("#progress-label").innerHTML = `<strong>${completed}</strong> of 3 steps complete`;
+        document.querySelector(".progress-fill").style.width = `${completed / 3 * 100}%`;
+        document.querySelector(".progress-track").setAttribute("aria-valuenow", completed);
+        roomTabs.forEach((tab, index) => {
+          tab.disabled = index > unlocked;
+          tab.setAttribute("aria-selected", String(index === state.current));
+          tab.querySelector(".tab-status").textContent = state.solved[index] ? `${String(index + 1).padStart(2, "0")} · COMPLETE` : index > unlocked ? `${String(index + 1).padStart(2, "0")} · LOCKED` : `${String(index + 1).padStart(2, "0")} · OPEN`;
+        });
+        document.querySelectorAll("[data-spot]").forEach((spot) => spot.classList.toggle("active", Number(spot.dataset.spot) === state.current));
+        document.querySelector("#scene-room").textContent = `You are at ${steps[state.current].toLowerCase()}`;
+        const solvedMarkup = state.solved[state.current]
+          ? `<div class="solved-box"><strong>${state.current === 0 ? "Employee verified" : state.current === 1 ? "Request correctly routed" : "Processing note submitted"}</strong><p>${getSuccessMessage(state.current)}</p>${state.current < 2 ? `<button class="continue-button" type="button" data-continue>Continue to ${steps[state.current + 1]} →</button>` : "<p>Processing will issue the ID card. Tilda is free to make her November getaway.</p>"}</div>`
+          : getStepContent(state.current);
+        puzzleContent.innerHTML = `<p class="room-kicker">Step ${String(state.current + 1).padStart(2, "0")} · ${state.solved[state.current] ? "Complete" : "Scenario"}</p><h2>${steps[state.current]}</h2>${solvedMarkup}`;
+        puzzleContent.querySelector("#verification-form")?.addEventListener("submit", verifyEmployee);
+        puzzleContent.querySelector("#request-form")?.addEventListener("submit", routeRequest);
+        puzzleContent.querySelector("#processing-form")?.addEventListener("submit", submitProcessingNote);
+        puzzleContent.querySelector("[data-continue]")?.addEventListener("click", () => { state.current += 1; hintOpen = false; save(); render(); });
+        escapedOverlay.hidden = completed !== 3;
+      }
+
+      function getStepContent(step) {
+        if (step === 0) {
+          return `<div class="scenario-call"><span class="call-label">Incoming employee request · Fictional training scenario</span><p>The caller asks for help with an ID card request.</p><blockquote>“Hi, this is ${employeeRecord.fullName}, a ${employeeRecord.role}. Can you help me?”</blockquote></div>
+            <p class="puzzle-copy">Before discussing request details, collect one primary and one secondary identity check. Verify both against the same fictional employee record in an approved tool.</p>
+            <form class="answer-form" id="verification-form">
+              <label for="employee-name">Primary check · Full name</label><input id="employee-name" name="fullName" type="text" autocomplete="off" required placeholder="Employee's full name">
+              <p class="field-help">Ask the caller for their full name; do not treat the caller's claim alone as verification.</p>
+              <label for="employee-role">Secondary check · Role</label><input id="employee-role" name="role" type="text" autocomplete="off" required placeholder="Employee's role">
+              <p class="field-help">Ask for the employee's role, then verify the name and role in the directory.</p>
+              <span class="route-heading">Choose the verification source</span>
+              <div class="tool-list"><label class="tool-option"><input type="radio" name="source" value="Outlook" checked><span>Outlook for Business<small>Simulated employee directory lookup</small></span></label><label class="tool-option"><input type="radio" name="source" value="Teams"><span>Teams for Business<small>Simulated employee directory lookup</small></span></label></div>
+              <div class="answer-row"><button class="submit-button" type="submit">Verify both checks</button></div><p class="form-message" id="verification-message" role="status"></p>
+            </form><p class="scenario-disclaimer">This lookup is fictional. It does not access Outlook, Teams, the Highway, or any Progressive directory.</p>`;
+        }
+
+        if (step === 1) {
+          return `<div class="scenario-call"><span class="call-label">Verified employee request · Florida</span><p>Identity is verified in the simulated ${state.verificationSource} directory. The employee requests an ID card for a Florida policy with no BIPD.</p><p><strong>Coverage:</strong> PIP/PIP with Physical Damage Only</p></div>
+            <p class="puzzle-copy">Choose the correct next step. Do not issue the ID card yourself.</p>
+            <form class="answer-form" id="request-form"><span class="route-heading">How should this request be handled?</span><div class="route-list">
+              <label class="route-option"><input type="radio" name="route" value="issue" required><span>Issue the Florida ID card now<small>Complete the request at the service desk.</small></span></label>
+              <label class="route-option"><input type="radio" name="route" value="processing"><span>Submit and document a Processing Request Note<small>Processing will issue the ID card.</small></span></label>
+            </div><div class="answer-row"><button class="submit-button" type="submit">Confirm request route</button></div><p class="form-message" id="request-message" role="status"></p></form>`;
+        }
+
+        return `<div class="scenario-call"><span class="call-label">Processing Request Note · Training preview</span><p>Document the verified employee's Florida ID card request for processing.</p></div>
+          <form class="answer-form" id="processing-form"><label for="processing-note">Note to Processing</label><textarea id="processing-note" class="processing-note" readonly aria-label="Preview of fictional Processing Request Note">Florida ID card request\nState: FL\nBIPD: None\nCoverage: PIP/PIP with Physical Damage Only\nEmployee identity: Full name and role verified in simulated ${state.verificationSource}\nAction requested: Please process and issue the ID card.</textarea>
+          <label class="confirm-row"><input type="checkbox" name="confirm-note" required><span>I reviewed the note and confirm the request is being submitted to Processing, not issued at the service desk.</span></label>
+          <div class="answer-row"><button class="submit-button" type="submit">Submit Request Note</button></div><p class="form-message" id="processing-message" role="status"></p></form>
+          <p class="scenario-disclaimer">Simulation only. This note is not sent to Progressive systems.</p>`;
+      }
+
+      function getSuccessMessage(step) {
+        if (step === 0) return `The full name (primary) and role (secondary) match the fictional employee record in simulated ${state.verificationSource}. Request details are now available.`;
+        if (step === 1) return "The Florida request is correctly routed as PIP/PIP with Physical Damage Only and no BIPD. Processing, not the Specialist, issues the ID card.";
+        return "The fictional Processing Request Note has been submitted in this training simulation.";
+      }
+
+      function verifyEmployee(event) {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const fullName = form.elements.fullName.value.trim().toLowerCase();
+        const role = form.elements.role.value.trim().toLowerCase();
+        const message = puzzleContent.querySelector("#verification-message");
+        if (fullName !== employeeRecord.fullName.toLowerCase() || role !== employeeRecord.role.toLowerCase()) {
+          message.textContent = "The directory did not verify both checks. Do not release request details; confirm the employee's full name and role, then search again.";
+          return;
+        }
+        state.verificationSource = form.elements.source.value;
+        completeStep(0);
+      }
+
+      function routeRequest(event) {
+        event.preventDefault();
+        const message = puzzleContent.querySelector("#request-message");
+        if (event.currentTarget.elements.route.value !== "processing") {
+          message.textContent = "Not quite. The Specialist submits and documents a Processing Request Note; Processing issues the ID card.";
+          return;
+        }
+        completeStep(1);
+      }
+
+      function submitProcessingNote(event) {
+        event.preventDefault();
+        if (!event.currentTarget.elements["confirm-note"].checked) {
+          puzzleContent.querySelector("#processing-message").textContent = "Review and confirm the note before submitting.";
+          return;
+        }
+        completeStep(2);
+      }
+
+      function completeStep(step) {
+        state.solved[step] = true;
+        save();
+        render();
+      }
+
+      function formatTime(seconds) {
+        return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+      }
+
+      function tick() {
+        if (!caseStarted || state.solved.every(Boolean)) return;
+        const secondsLeft = Math.max(0, Math.ceil((state.deadline - Date.now()) / 1000));
+        timer.textContent = formatTime(secondsLeft);
+        if (secondsLeft === 0) {
+          caughtOverlay.hidden = false;
+          return;
+        }
+        timerHandle = window.setTimeout(tick, 250);
+      }
+
+      function startFloridaCase() {
+        caseMenu.hidden = true;
+        floridaGame.hidden = false;
+        timerPanel.hidden = false;
+        resetButton.hidden = false;
+        caseStarted = true;
+        state.deadline = Date.now() + remainingMs;
+        save();
+        render();
+        tick();
+      }
+
+      function restart() {
+        state = freshState();
+        remainingMs = roundSeconds * 1000;
+        state.deadline = Date.now() + remainingMs;
+        hintOpen = false;
+        caughtOverlay.hidden = true;
+        escapedOverlay.hidden = true;
+        save();
+        render();
+        tick();
+      }
+
+      roomTabs.forEach((tab) => tab.addEventListener("click", () => {
+        state.current = Number(tab.dataset.roomTab);
+        hintOpen = false;
+        save();
+        render();
+      }));
+      document.querySelector("#reset-button").addEventListener("click", () => {
+        if (window.confirm("Start over and reset all three locks?")) restart();
+      });
+      document.querySelector("#start-florida-case").addEventListener("click", startFloridaCase);
+      document.querySelectorAll("[data-restart]").forEach((button) => button.addEventListener("click", restart));
+    })();
+  </script>
+</body>
+</html>
